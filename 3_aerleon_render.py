@@ -146,13 +146,35 @@ def build_aerlon_def_service(df_services):
     return services
 
 
-if __name__ == "__main__":
-    # Build Aerlon policy
-    aerlon_policy = build_aerlon_policy(df_flows)
-    aerlon_def_network = build_aerlon_def_network(df_networks)
-    aerlon_def_service = build_aerlon_def_service(df_services)
+#
+# 3. Aerleon Render
+#
 
-    # Print Aerlon policy
-    rprint(aerlon_policy)
-    rprint(aerlon_def_network)
-    rprint(aerlon_def_service)
+# Build Aerlon policy and definitions dicts
+policy = build_aerlon_policy(df_flows)
+def_service = build_aerlon_def_service(df_services)
+def_network = build_aerlon_def_network(df_networks)
+
+# Create def objects from the definitions
+from aerleon.lib import naming  # isort:skip
+
+definitions = naming.Naming()
+definitions.ParseDefinitionsObject(def_network, "networks")
+definitions.ParseDefinitionsObject(def_service, "services")
+
+# Render the firewall config from the policy and definitions inputs
+from aerleon import api  # isort:skip
+
+configs = api.Generate(policy, definitions=definitions)
+
+fw1_filter_config = configs["fw1-asa.asa"]
+fw2_filter_config = configs["fw2-srx.srx"]
+
+# Clean up rendered configs
+import re  # no qa
+
+fw1_filter_config = re.sub("\n\n\n", "\n", fw1_filter_config)
+fw2_filter_config = re.sub("\n\n\n", "\n", fw2_filter_config)
+
+rprint(fw1_filter_config)
+rprint(fw2_filter_config)

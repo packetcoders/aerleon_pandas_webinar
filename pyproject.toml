@@ -12,6 +12,7 @@ ipython = "^8.13.2"
 pandas = "^2.0.1"
 aerleon = "^1.2.3"
 rich = "^13.3.5"
+black = "^23.3.0"
 
 
 [build-system]
