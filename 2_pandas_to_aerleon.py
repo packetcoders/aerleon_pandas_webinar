@@ -93,12 +93,12 @@ def build_aerlon_policy(df_flows):
         filter_names = get_filter_names(df_flows, fw)
 
         # Loop through filter names for firewall
-        for filter_name in filter_names:  # Renamed loop variable to filter_name
+        for filter_name in filter_names:
             # Create a dictionary for each filter
             filter_dict = {
                 "header": {"targets": {platform: filter_name}},
                 "terms": [],
-            }  # Renamed dictionary variable to filter_dict
+            }
 
             # Get filter terms
             filter_terms = get_filter_terms(
@@ -110,12 +110,11 @@ def build_aerlon_policy(df_flows):
                 # Build term for a filter
                 filter_dict["terms"].append(
                     build_term(row)
-                )  # Replaced filter with filter_dict
-
+                )
             # Add filter to firewall
             fw_filters["filters"].append(
                 filter_dict
-            )  # Replaced filter with filter_dict
+            )  
 
         # Add firewall to list of firewalls
         fw_all_policy.append(fw_filters)
