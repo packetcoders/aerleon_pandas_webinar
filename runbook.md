@@ -12,6 +12,9 @@ print(df.to_html())
 df.to_markdown()
 print(df.to_markdown())
 
+rprint(df.to_dict(orient="records"))
+
+df
 df.iloc[0]
 
 df["firewall"]
